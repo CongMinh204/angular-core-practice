@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TodoItem } from '../pages/todo/todo.model';
+import { todo } from 'node:test';
 
 
 @Injectable({
@@ -11,11 +12,26 @@ export class TodoService {
   todos = signal<TodoItem[]>(this.loadFromLocalStorage());
 
   private loadFromLocalStorage(): TodoItem[] {
+    if (typeof window === 'undefined') {
+      return [];
+    }
     const data = localStorage.getItem(this.STORAGE_KEY);
     return data ? JSON.parse(data) : [];
   }
 
   private saveToLocalStorage(todos: TodoItem[]): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(todos));
+  }
+
+  private loadFromStorage(): TodoItem[] {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  }
+
+  private saveToStorage(todos: TodoItem[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(todos));
   }
 
@@ -24,19 +40,22 @@ export class TodoService {
     if (trimmed.length === 0) {
       return;
     }
-    const newTodo: TodoItem = {
-      id: Date.now(),
-      title: trimmed,
-      completed: false,
-    };
-
-    this.todos.update((list) => [...list, newTodo]);
+    this.todos.update((list) => {
+      const newList = [
+        ...list,
+        { id: Date.now(), title: trimmed, completed: false }
+      ];
+      this.saveToStorage(newList);
+      return newList;
+    });
   }
 
   removeTodo(index: number): void {
-    const list = [...this.todos()];
-    list.splice(index, 1);
-    this.todos.set(list);
+    this.todos.update(list => {
+      const newList = list.filter(todo => todo.id !== index);
+      this.saveToStorage(newList);
+      return newList;
+    });
   }
 
   isEmpty(): boolean {
@@ -47,11 +66,16 @@ export class TodoService {
   }
 
   toggleTodo(id: number): void {
-    this.todos.update((list) =>
-      list.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+    this.todos.update(list => {
+      const newList = list.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      });
+      this.saveToStorage(newList);
+      return newList;
+    });
   }
 
   enableEditing(id: number): void {
@@ -71,14 +95,18 @@ export class TodoService {
   }
 
   saveEditing(newTitle: string, id: number): void {
-    this.todos.update((list) =>
-      list.map((todo) =>
-        todo.id === id ? { ...todo, title: newTitle.trim(), editing: false } : todo
-      )
-    );
+    if (!newTitle.trim()) {
+      return;
+    }
+    this.todos.update((list) => {
+      const newList = list.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, title: newTitle.trim(), editing: false };
+        }
+        return todo;
+      });
+      this.saveToStorage(newList);
+      return newList;
+    });
   }
-
-
-
-
 }
