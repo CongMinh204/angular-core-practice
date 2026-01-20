@@ -4,3 +4,5 @@ export interface TodoItem {
     completed: boolean;
     editing?: boolean;
 }
+
+export type TodoFilter = 'all' | 'active' | 'completed';

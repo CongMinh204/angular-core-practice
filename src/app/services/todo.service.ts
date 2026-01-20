@@ -1,6 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TodoItem } from '../pages/todo/todo.model';
+import { TodoFilter, TodoItem } from '../pages/todo/todo.model';
 import { todo } from 'node:test';
 
 
@@ -10,6 +10,7 @@ import { todo } from 'node:test';
 export class TodoService {
   private readonly STORAGE_KEY = 'todos';
   todos = signal<TodoItem[]>(this.loadFromLocalStorage());
+  filter = signal<TodoFilter>('all');
 
   private loadFromLocalStorage(): TodoItem[] {
     if (typeof window === 'undefined') {
@@ -33,6 +34,23 @@ export class TodoService {
 
   private saveToStorage(todos: TodoItem[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(todos));
+  }
+
+  filterTodos = computed(() => {
+    const currentFilter = this.filter();
+    const list = this.todos();
+
+    if (currentFilter == 'active') {
+      return list.filter(todo => !todo.completed);
+    }
+    if (currentFilter == 'completed') {
+      return list.filter(todo => todo.completed);
+    }
+    return list;
+  });
+
+  setFilter(filter: TodoFilter): void {
+    this.filter.set(filter);
   }
 
   addTodo(title: string): void {

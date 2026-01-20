@@ -16,26 +16,45 @@
             </button>
         </div>
     </div>
+    <div class="flex justify-center gap-4 px-4 py-2">
+        <button class="px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'all'"
+            (click)="todoService.setFilter('all')">
+            All
+        </button>
+
+        <button class="px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'active'"
+            (click)="todoService.setFilter('active')">
+            Active
+        </button>
+
+        <button class="px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'completed'"
+            (click)="todoService.setFilter('completed')">
+            Completed
+        </button>
+    </div>
     <ul class="divide-y divide-gray-200 px-4">
-        @for (item of todoService.todos(); track item.id) {
-        <li class="py-4 flex items-center justify-between">
-            <div class="flex items-center">
+        @for (item of todoService.filterTodos(); track item.id) {
+        <li class="py-4 flex items-start gap-3">
+            <!-- LEFT -->
+            <div class="flex items-center flex-1 min-w-0">
                 <input type="checkbox" class="h-4 w-4 text-teal-600 border-gray-300 rounded" [checked]="item.completed"
-                    (change)="todoService.toggleTodo(item.id)">
-                <label class="ml-3 block text-gray-900 w-full">
+                    (change)="todoService.toggleTodo(item.id)" />
+                <label class="ml-3 block w-full">
                     @if (!item.editing) {
-                    <span class="text-lg font-medium" [class.line-through]="item.completed">
+                    <span class="text-lg font-medium break-words" [class.line-through]="item.completed">
                         {{ item.title }}
                     </span>
                     } @else {
                     <input #editInput type="text" class="border rounded px-2 py-1 w-full" [value]="item.title"
                         (keyup.enter)="todoService.saveEditing(editInput.value, item.id);"
                         (blur)="todoService.saveEditing(editInput.value, item.id)"
-                        (keyup.escape)="todoService.cancelEditing(item.id)" autofocus />
+                        (keyup.escape)="todoService.cancelEditing(item.id)" />
                     }
                 </label>
             </div>
-            <div class="flex items-center gap-4">
+
+            <!-- RIGHT -->
+            <div class="flex items-center gap-4 shrink-0">
                 <button (click)=" todoService.enableEditing(item.id) "
                     class="justify-self-end-safe text-yellow-500 hover:text-yellow-900 font-semibold">
                     Edit
