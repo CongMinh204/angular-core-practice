@@ -1,79 +1,86 @@
-<div class="max-w-md  bg-white shadow-lg rounded-lg overflow-hidden ">
-    <div class="px-4 py-2">
-        <h1 class="text-gray-800 font-bold text-2xl uppercase">To-Do List</h1>
+<div class="max-w-md  bg-white shadow-lg rounded-lg overflow-hidden" [class.dark-theme]="isDark">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between px-4 py-3
+              border-b border-gray-200 dark:border-gray-700">
+        <h1 class="text-2xl font-bold uppercase">
+            To-Do List
+        </h1>
+
+        <button (click)="toggleTheme()" class="px-3 py-1 text-sm rounded
+             hover:bg-gray-300 dark:hover:bg-gray-700
+             transition">
+            🌙 / ☀️
+        </button>
     </div>
-    <div class="w-full max-w-sm mx-auto px-4 py-2">
-        <div class="flex items-center border-b-2 border-teal-500 py-2">
-            <input #taskInput
-                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                type="text" placeholder="add task here" (keyup.enter)="todoService.addTodo(taskInput.value);
-          taskInput.value=''">
-            <button class="flex-shrink-0 
-                bg-teal-500 hover:bg-teal-400 
-                border-teal-500 hover:border-teal-400 
-                text-sm border-4 text-white py-1 px-2 rounded" type="button" (click)="todoService.addTodo(taskInput.value);
-           taskInput.value=''">
+
+    <!-- INPUT -->
+    <div class="px-4 py-3">
+        <div class="flex items-center border-b-2 border-teal-500">
+            <input #taskInput type="text" placeholder="Add task..." class="w-full bg-transparent py-2 px-2
+               placeholder-gray-400 dark:placeholder-gray-500
+               focus:outline-none" (keyup.enter)="addTodo(taskInput.value); taskInput.value=''">
+
+            <button class="ml-2 px-3 py-1 rounded
+               bg-teal-500 hover:bg-teal-400
+               text-white text-sm font-semibold" (click)="addTodo(taskInput.value); taskInput.value=''">
                 Add
             </button>
         </div>
     </div>
+
+    <!-- FILTER -->
     <div class="flex justify-center gap-4 px-4 py-2">
         <button class="bg-teal-500 hover:bg-teal-400 
         border-teal-500 hover:border-teal-400
-         px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'all'"
-            (click)="todoService.setFilter('all')">
+         px-3 py-1 rounded text-sm" [class.bg-teal-500]="filter() === 'all'" (click)="setFilter('all')">
             All
         </button>
 
         <button class="bg-teal-500 hover:bg-teal-400 
         border-teal-500 hover:border-teal-400 
-        px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'active'"
-            (click)="todoService.setFilter('active')">
+        px-3 py-1 rounded text-sm" [class.bg-teal-500]="filter() === 'active'" (click)="setFilter('active')">
             Active
         </button>
 
         <button class="bg-teal-500 hover:bg-teal-400
          border-teal-500 hover:border-teal-400 
-         px-3 py-1 rounded text-sm" [class.bg-teal-500]="todoService.filter() === 'completed'"
-            (click)="todoService.setFilter('completed')">
+         px-3 py-1 rounded text-sm" [class.bg-teal-500]="filter() === 'completed'" (click)="setFilter('completed')">
             Completed
         </button>
     </div>
-    <ul class="divide-y divide-gray-200 px-4">
-        @for (item of todoService.filterTodos(); track item.id) {
-        <li class="py-4 flex items-start gap-3">
-            <!-- LEFT -->
-            <div class="flex items-center flex-1 min-w-0">
-                <input type="checkbox" class="h-4 w-4 text-teal-600 border-gray-300 rounded" [checked]="item.completed"
-                    (change)="todoService.toggleTodo(item.id)" />
-                <label class="ml-3 block w-full">
-                    @if (!item.editing) {
-                    <span class="text-lg font-medium break-words" [class.line-through]="item.completed">
-                        {{ item.title }}
-                    </span>
-                    } @else {
-                    <input #editInput type="text" class="border rounded px-2 py-1 w-full" [value]="item.title"
-                        (keyup.enter)="todoService.saveEditing(editInput.value, item.id);"
-                        (blur)="todoService.saveEditing(editInput.value, item.id)"
-                        (keyup.escape)="todoService.cancelEditing(item.id)" />
-                    }
-                </label>
-            </div>
 
-            <!-- RIGHT -->
-            <div class="flex items-center gap-4 shrink-0">
-                <button (click)=" todoService.enableEditing(item.id) "
-                    class="justify-self-end-safe text-yellow-500 hover:text-yellow-900 font-semibold">
-                    Edit
-                </button>
-                <button (click)="todoService.removeTodo(item.id)" class="text-red-600 hover:text-red-900 font-semibold">
-                    Delete
-                </button>
-            </div>
+    <!-- LIST -->
+    <ul class="divide-y divide-gray-200 dark:divide-gray-700 px-4">
+        @for (item of filterTodos(); track item.id) {
+        <li class="flex items-start gap-3 py-3">
+            <input type="checkbox" class="mt-1 h-4 w-4 accent-teal-500" [checked]="item.completed"
+                (change)="toggleTodo(item.id)" />
+
+            <label class="flex-1">
+                @if (!item.editing) {
+                <span class="break-words" [class.line-through]="item.completed">
+                    {{item.title}}
+                </span>
+                } @else {
+                <input #editInput type="text" class="w-full px-2 border rounded bg-transparent focus:outline-none"
+                    [value]="item.title" (keyup.enter)="todoService.saveEditing(editInput.value, item.id)"
+                    (blur)="todoService.saveEditing(editInput.value, item.id)"
+                    (keyup.escape)="todoService.cancelEditing(item.id)" />
+                }
+            </label>
+
+            <button class="text-yellow-400 hover:text-yellow-300 text-sm" (click)="todoService.enableEditing(item.id)">
+                Edit
+            </button>
+
+            <button class="text-red-400 hover:text-red-300 text-sm" (click)="removeTodo(item.id)">
+                Delete
+            </button>
         </li>
         } @empty {
-        <li class="py-10 text-center text-gray-400 italic">
-            there is nothing to do yet
+        <li class="py-10 text-center italic text-gray-400">
+            There is nothing to do yet
         </li>
         }
     </ul>

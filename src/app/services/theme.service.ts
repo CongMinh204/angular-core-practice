@@ -17,6 +17,11 @@ export class ThemeService {
     }
   }
 
+  isDark() {
+    if (this.theme() === 'dark') return true;
+    else return false;
+  }
+
   enableDark() {
     document.documentElement.classList.add('dark');
     this.theme.set('dark');

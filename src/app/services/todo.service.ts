@@ -53,7 +53,7 @@ export class TodoService {
     this.filter.set(filter);
   }
 
-  addTodo(title: string): void {
+  public addTodo(title: string): void {
     const trimmed = title.trim();
     if (trimmed.length === 0) {
       return;
@@ -97,10 +97,12 @@ export class TodoService {
   }
 
   enableEditing(id: number): void {
-    this.todos.update((list) =>
-      list.map((todo) =>
-        todo.id === id ? { ...todo, editing: true } : todo
-      )
+    console.log('Editing:', id);
+    this.todos.update(list =>
+      list.map(todo => ({
+        ...todo,
+        editing: todo.id === id,
+      }))
     );
   }
 

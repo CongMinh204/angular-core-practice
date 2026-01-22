@@ -1,0 +1,61 @@
+/* Giữ nguyên giao diện: chỉ dùng để đặt nút đúng góc phải */
+.todo-header {
+    position: relative;
+}
+
+/* Nút ở góc phải, không làm lệch layout */
+.theme-btn {
+    position: absolute;
+    top: 10px;
+    /* chỉnh nhẹ nếu muốn */
+    right: 12px;
+    /* chỉnh nhẹ nếu muốn */
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.theme-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+/* ===================== */
+/* DARK THEME (chỉ khi bật) */
+/* ===================== */
+
+.dark-theme {
+    background: #0f172a !important;
+    /* slate-900 */
+    color: #e2e8f0;
+}
+
+/* vì h1 có text-gray-800 cố định */
+.dark-theme h1 {
+    color: #f8fafc !important;
+}
+
+/* input add task đang text-gray-700 cố định */
+.dark-theme input {
+    color: #e2e8f0 !important;
+}
+
+.dark-theme ::placeholder {
+    color: #94a3b8 !important;
+}
+
+/* chia dòng list: vì bạn dùng divide-gray-200 */
+.dark-theme .divide-gray-200> :not([hidden])~ :not([hidden]) {
+    border-color: rgba(148, 163, 184, 0.35) !important;
+}
+
+/* hover nút theme trên nền tối */
+.dark-theme .theme-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
