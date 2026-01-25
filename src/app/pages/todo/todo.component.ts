@@ -3,11 +3,15 @@ import { Component, inject, signal } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { ThemeService } from '../../services/theme.service';
 import { TodoFilter } from './todo.model';
-
+import { CheckboxModule } from 'primeng/checkbox';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-todo',
-  imports: [CommonModule],
+  imports: [CommonModule,
+    CheckboxModule,
+    FormsModule
+  ],
   templateUrl: './todo.html',
   styleUrl: './todo.css',
 })

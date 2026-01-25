@@ -1,4 +1,4 @@
-<div class="max-w-md  bg-white shadow-lg rounded-lg overflow-hidden" [class.dark-theme]="isDark">
+<div class="max-w-md  bg-white text-black shadow-lg rounded-lg overflow-hidden" [class.dark-theme]="isDark">
 
     <!-- HEADER -->
     <div class="flex items-center justify-between px-4 py-3
@@ -54,8 +54,7 @@
     <ul class="divide-y divide-gray-200 dark:divide-gray-700 px-4">
         @for (item of filterTodos(); track item.id) {
         <li class="flex items-start gap-3 py-3">
-            <input type="checkbox" class="mt-1 h-4 w-4 accent-teal-500" [checked]="item.completed"
-                (change)="toggleTodo(item.id)" />
+            <p-check-box [(ngModel)]="item.completed" [binary]="true"></p-check-box>
 
             <label class="flex-1">
                 @if (!item.editing) {
