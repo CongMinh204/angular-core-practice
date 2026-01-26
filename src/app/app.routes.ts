@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
+        path: '',
+        loadComponent: () =>
+            import('./pages/home/home').then(m => m.HomeComponent),
+    },
+    {
         path: 'todo',
         loadComponent: () =>
-            import('./pages/todo/todo.component').then(m => m.TodoComponent)
+            import('./pages/todo/todo.component').then(m => m.TodoComponent),
     },
-    { path: '', redirectTo: 'todo', pathMatch: 'full' },
 ];

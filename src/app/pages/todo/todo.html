@@ -54,7 +54,7 @@
     <ul class="divide-y divide-gray-200 dark:divide-gray-700 px-4">
         @for (item of filterTodos(); track item.id) {
         <li class="flex items-start gap-3 py-3">
-            <p-check-box [(ngModel)]="item.completed" [binary]="true"></p-check-box>
+            <p-check-box class="todo-checkbox" [(ngModel)]="item.completed" [binary]="true"></p-check-box>
 
             <label class="flex-1">
                 @if (!item.editing) {

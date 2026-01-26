@@ -1,61 +1,74 @@
-/* Giữ nguyên giao diện: chỉ dùng để đặt nút đúng góc phải */
-.todo-header {
-    position: relative;
+/* ========================= */
+/* LIGHT THEME */
+/* ========================= */
+.todo-checkbox .p-checkbox-box {
+    background: white;
+    border: 2px solid #14b8a6;
+    /* teal-500 */
 }
 
-/* Nút ở góc phải, không làm lệch layout */
-.theme-btn {
-    position: absolute;
-    top: 10px;
-    /* chỉnh nhẹ nếu muốn */
-    right: 12px;
-    /* chỉnh nhẹ nếu muốn */
-    width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.todo-checkbox .p-checkbox-box.p-highlight {
+    background: #14b8a6;
+    border-color: #14b8a6;
+}
+
+/* icon ✓ trên nền teal */
+.todo-checkbox .p-checkbox-icon {
+    color: white;
+}
+
+/* ============================================= */
+/* FIX LỖI CHECKBOX DARK THEME (COPY ĐÈO LÊN CŨ) */
+/* ============================================= */
+
+/* 1. Trạng thái CHƯA CHECK: Nền trong suốt, Viền xanh */
+:host ::ng-deep .dark-theme .todo-checkbox .p-checkbox-box {
     background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
+    border: 2px solid #2dd4bf;
+    /* teal-400 */
 }
 
-.theme-btn:hover {
-    background: rgba(0, 0, 0, 0.08);
+/* 2. Trạng thái ĐÃ CHECK: Nền PHẢI màu xanh sáng */
+/* Lưu ý: Class .p-highlight đánh dấu trạng thái đã chọn */
+:host ::ng-deep .dark-theme .todo-checkbox .p-checkbox-box.p-highlight {
+    background-color: #5eead4;
+    /* teal-300 - QUAN TRỌNG: Đây là cái màu bị mất */
+    border-color: #5eead4;
 }
 
-/* ===================== */
-/* DARK THEME (chỉ khi bật) */
-/* ===================== */
-
-.dark-theme {
-    background: #0f172a !important;
+/* 3. ICON DẤU TÍCH: Màu đen đậm (để nổi trên nền xanh sáng) */
+:host ::ng-deep .dark-theme .todo-checkbox .p-checkbox-icon {
+    color: #5eead4;
     /* slate-900 */
-    color: #e2e8f0;
+    font-weight: 800;
+    /* Đậm hơn chút cho rõ */
 }
 
-/* vì h1 có text-gray-800 cố định */
-.dark-theme h1 {
-    color: #f8fafc !important;
+/* 4. Hiệu ứng Hover cho sướng tay */
+:host ::ng-deep .dark-theme .todo-checkbox .p-checkbox-box:hover {
+    border-color: #5eead4 !important;
 }
 
-/* input add task đang text-gray-700 cố định */
+
+
+/* ========================= */
+/* MAIN CARD DARK THEME      */
+/* ========================= */
+/* Dùng  để đè lên class bg-white của Tailwind */
+.dark-theme {
+    background-color: #1e293b;
+    /* slate-800 hoặc #0f172a (slate-900) tùy bạn */
+    color: white;
+    border-color: #334155;
+    /* slate-700 cho viền nếu cần */
+}
+
+/* Chỉnh lại màu border header khi dark mode */
+.dark-theme .border-b {
+    border-color: #334155;
+}
+
+/* Chỉnh màu input khi dark mode */
 .dark-theme input {
-    color: #e2e8f0 !important;
-}
-
-.dark-theme ::placeholder {
-    color: #94a3b8 !important;
-}
-
-/* chia dòng list: vì bạn dùng divide-gray-200 */
-.dark-theme .divide-gray-200> :not([hidden])~ :not([hidden]) {
-    border-color: rgba(148, 163, 184, 0.35) !important;
-}
-
-/* hover nút theme trên nền tối */
-.dark-theme .theme-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
+    color: white;
 }
